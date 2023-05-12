@@ -2,26 +2,115 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+.move {
+  background-size: 400% 400%;
+  animation: smooth 30s ease infinite;
+  
+}
+
+@keyframes smooth {
+  0% {
+    background-position: 60% 85%;
+  }
+
+  20% {
+    background-position: 49% 81%;
+  }
+
+  20.0001% {
+    /* -- View 2 -- */
+    background-position: 60% 50%;
+  }
+
+  40% {
+    background-position: 10% 20%;
+  }
+
+  40.0001% {
+    /* -- View 3 -- */
+    background-position: 10% 52%;
+  }
+
+  60% {
+    background-position: 84% 20%;
+  }
+
+  60.0001% {
+    /* -- View 4 -- */
+    background-position: 0% 0%;
+  }
+
+  80% {
+    background-position: 15% 4%;
+  }
+
+  80.0001% {
+    /* -- View 5 -- */
+    background-position: 80% 10%;
+  }
+
+  100% {
+    background-position: 72% 14%;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+
+.pulse-out {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 6rem;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+.pulse-out:before,
+.pulse-out:after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  animation: pulsOut 1.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 1rem rgba(124, 127, 181, 0.75));
+}
+.pulse-out:before {
+  width: 100%;
+  padding-bottom: 100%;
+  box-shadow: inset 0 0 0 1rem #c791e8;
+  animation-name: pulsIn;
+}
+.pulse-out:after {
+  width: calc(100% - 2rem);
+  padding-bottom: calc(100% - 2rem);
+  box-shadow: 0 0 0 0 #c791e8;
+}
+
+@keyframes pulsIn {
+  0% {
+    box-shadow: inset 0 0 0 1rem #c791e8;
+    opacity: 1;
+  }
+  50%,
+  100% {
+    box-shadow: inset 0 0 0 0 #c791e8;
+    opacity: 0;
+  }
+}
+
+@keyframes pulsOut {
+  0%,
+  50% {
+    box-shadow: 0 0 0 0 #c791e8;
+    opacity: 0;
+  }
+  100% {
+    box-shadow: 0 0 0 1rem #c791e8;
+    opacity: 1;
+  }
 }
