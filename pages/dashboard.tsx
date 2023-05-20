@@ -135,11 +135,13 @@ export default function Home(): JSX.Element {
 							</h2>
 							<div className="flex items-center gap-1 text-lg text-[#38b000] font-medium">
 								{clientGrowth}%
-								<IconChevronUp
-									className="text-[#38b000]"
-									size={32}
-									stroke={2}
-								/>
+								{Math.floor(clientGrowth) === 100 ? (
+									<IconMinus size={32} stroke={2} />
+								) : clientGrowth < 0 ? (
+									<IconChevronDown size={32} stroke={2} />
+								) : (
+									<IconChevronUp size={32} stroke={2} />
+								)}
 							</div>
 						</div>
 						<div className="text-4xl font-sans font-light px-2 py-4">
@@ -150,8 +152,28 @@ export default function Home(): JSX.Element {
 							<Link href={"#"} className="px-1">
 								voir tous les clients.
 							</Link>
-							<div className="p-1 rounded-md bg-sky-400/40 cursor-pointer">
-								<IconUser className="text-sky-500" stroke={1.75} size={28} />
+							<div
+								className={classNames(
+									"p-1 rounded-md  cursor-pointer",
+									clientGrowth < 0
+										? "bg-red-500/40"
+										: Math.ceil(clientGrowth) === 100
+										? "bg-amber-500/40"
+										: "bg-sky-400/30",
+									"drop-shadow-2xl shadow-md"
+								)}
+							>
+								<IconUser
+									className={classNames(
+										clientGrowth < 0
+											? "text-red-600"
+											: Math.ceil(clientGrowth) === 100
+											? "text-amber-500"
+											: "text-sky-500"
+									)}
+									stroke={1.75}
+									size={28}
+								/>
 							</div>
 						</div>
 					</div>
@@ -167,7 +189,7 @@ export default function Home(): JSX.Element {
 									incomeGrowth < 0
 										? "text-red-600"
 										: Math.ceil(incomeGrowth) === 100
-										? "text-amber-500"
+										? "text-amber-500/40"
 										: "text-[#38b000]"
 								)}
 							>
@@ -195,8 +217,9 @@ export default function Home(): JSX.Element {
 									incomeGrowth < 0
 										? "bg-red-500/40"
 										: Math.ceil(incomeGrowth) === 100
-										? "bg-amber-500"
-										: "bg-[#38b000]"
+										? "bg-amber-500/40"
+										: "bg-[#38b000]/30",
+									"drop-shadow-2xl shadow-md"
 								)}
 							>
 								<IconChartPie
@@ -264,7 +287,7 @@ export default function Home(): JSX.Element {
 				</section>
 
 				<section className=" shadow-lg px-4 py-6 bg-white rounded-lg w-full h-fit">
-					{analytics.data?.incomePerMonth ? (
+					{analytics.data && analytics.data?.incomePerMonth.length > 0 ? (
 						<AreaChart
 							marker={analytics.data.averageIncome}
 							labels={analytics.data.incomePerMonth?.map(

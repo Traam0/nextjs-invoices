@@ -14,9 +14,10 @@ import autoTable from "jspdf-autotable";
 
 interface GenerateInvoiceProps {
 	handleClick: (callBack?: Function) => void;
+	variation: string;
 }
 
-var comapnyData = {
+const comapnyData = {
 	CompanyName: "Moussaid Design",
 	CNI: "K449069",
 	autoEntrepreneur: "AE-171004-524763",
@@ -42,29 +43,12 @@ var lineSpacing = {
 	NormalSpacing: 12,
 };
 
-function getFooterData(invoice: Invoice) {
-	if (invoice.avance <= 0) {
-		return [
-			["", "", "", "", "", "Total", Number(invoice.total).toFixed(2)],
-			["", "", "", "", "", "TVA", String(invoice.TVA * 100 + " %")],
-			["", "", "", "", "", "Total TTC", Number(invoice.totalTTC).toFixed(2)],
-		];
-	} else {
-		return [
-			["", "", "", "", "", "Total", Number(invoice.total).toFixed(2)],
-			["", "", "", "", "", "TVA", String(invoice.TVA * 100 + " %")],
-			["", "", "", "", "", "Total TTC", Number(invoice.totalTTC).toFixed(2)],
-			["", "", "", "", "", "Avance", Number(invoice.avance).toFixed(2)],
-			["", "", "", "", "", "Rest", Number(invoice.rest).toFixed(2)],
-		];
-	}
-}
-
-export function GenerateInvoice({ handleClick }: GenerateInvoiceProps) {
+export function GenerateInvoice({
+	handleClick,
+	variation,
+}: GenerateInvoiceProps) {
 	//
-
 	function generateInvoicePDF(invoice: Invoice): void {
-		// alert(`gen pdf `);
 		const document = new jsPDF("p", "pt", "a4");
 		const rightStartCol1 = 365;
 		const rightStartCol2 = 435;
@@ -256,7 +240,6 @@ export function GenerateInvoice({ handleClick }: GenerateInvoiceProps) {
 		document.setFontSize(fontSizes.NormalFontSize);
 
 		document.setFont("helvetica", "bold");
-
 		autoTable(document, {
 			columns: [
 				...[
@@ -281,7 +264,7 @@ export function GenerateInvoice({ handleClick }: GenerateInvoiceProps) {
 				]),
 			],
 			startY: (startY += 2 * lineSpacing.NormalSpacing),
-			foot: getFooterData(invoice),
+			foot: getFooterData(invoice, variation),
 			footStyles: {
 				fillColor: "white",
 				textColor: "black",
@@ -290,10 +273,57 @@ export function GenerateInvoice({ handleClick }: GenerateInvoiceProps) {
 				lineColor: "black",
 			},
 		});
-
 		document.save(
 			`${invoice._id}(${format(parseISO(invoice.updatedAt), "dd-MM-yyyy")}).pdf`
 		);
+	}
+
+	function getFooterData(invoice: Invoice, variation: string): Array<string[]> {
+		switch (variation) {
+			case "avance":
+				return [
+					["", "", "", "", "", "Total", Number(invoice.total).toFixed(2)],
+					["", "", "", "", "", "TVA", String(invoice.TVA * 100 + " %")],
+					[
+						"",
+						"",
+						"",
+						"",
+						"",
+						"Total TTC",
+						Number(invoice.totalTTC).toFixed(2),
+					],
+					["", "", "", "", "", "Avance", Number(invoice.avance).toFixed(2)],
+					["", "", "", "", "", "Rest", Number(invoice.rest).toFixed(2)],
+				];
+			case "devis":
+				return [
+					[
+						"",
+						"",
+						"",
+						"",
+						"",
+						"Total TTC",
+						Number(invoice.totalTTC).toFixed(2),
+					],
+				];
+
+			default:
+				return [
+					["", "", "", "", "", "Total", Number(invoice.total).toFixed(2)],
+					["", "", "", "", "", "TVA", String(invoice.TVA * 100 + " %")],
+					[
+						"",
+						"",
+						"",
+						"",
+						"",
+						"Total TTC",
+						Number(invoice.totalTTC).toFixed(2),
+					],
+				];
+		}
 	}
 
 	return (
@@ -304,7 +334,7 @@ export function GenerateInvoice({ handleClick }: GenerateInvoiceProps) {
 				handleClick(generateInvoicePDF);
 			}}
 		>
-			<IconFileInvoice /> PDF
+			<IconFileInvoice /> {variation === 'avance' ? 'Bon D\'avance' : variation === 'devis' ? "Bon devis" : "Facture normal"}
 		</button>
 	);
 }

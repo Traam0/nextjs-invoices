@@ -18,12 +18,16 @@ import { Dialog } from "@headlessui/react";
 import { Divider } from "@/components/ui";
 import { StatusCodes } from "http-status-codes";
 import { IconPlus } from "@tabler/icons-react";
-import { Client, Item } from "@/utils/types";
+import { Client, Invoice, Item } from "@/utils/types";
 import { GenerateInvoice } from "@/components/pdf";
 
 export default function Projects(): JSX.Element {
 	const session = useSession();
 	const router = useRouter();
+	const [items, setItems] = useState<Item[]>([]);
+	const [avance, setAvance] = useState<number>(0);
+	const [tva, setTVA] = useState<number>(0.2);
+	const [clientDialogOpen, toggleClientDialogOpen] = useToggle(false);
 
 	const form = useForm({
 		initialValues: {
@@ -62,11 +66,6 @@ export default function Projects(): JSX.Element {
 		},
 	});
 
-	const [items, setItems] = useState<Item[]>([]);
-	const [avance, setAvance] = useState<number>(0);
-	const [tva, setTVA] = useState<number>(0.2);
-	const [clientDialogOpen, toggleClientDialogOpen] = useToggle(false);
-
 	function handleSubmit(): void {
 		setItems((prev) => [
 			...prev,
@@ -86,16 +85,15 @@ export default function Projects(): JSX.Element {
 		const client =
 			form.values.clientId === "Client Passage"
 				? {
-						_id: null,
+						_id: " ",
 						name: "Client Passage",
-						ICE: null,
-						address: null,
+						ICE: "",
+						address: "",
 						type: "Client Passage",
-						phone: null,
-						website: null,
+						phone: "",
+						website: "",
 				  }
 				: clients.data?.find((c) => c.name === form.values.clientId);
-		console.table(form.values);
 		console.log(client);
 		if (items.length > 0) {
 			axios
@@ -121,7 +119,7 @@ export default function Projects(): JSX.Element {
 				.then(({ status, data: res }) => {
 					toast.success("invoice created successfully");
 					console.log(res);
-					if (callBack) callBack(res);
+					if (callBack) callBack(res, "");
 				})
 				.catch((err: AxiosError) => {
 					console.log(err);
@@ -503,8 +501,11 @@ export default function Projects(): JSX.Element {
 							placeholder="00.00 DH"
 						/>
 					</div>
-					<div className="flex flex-col justify-end h-full">
-						<GenerateInvoice handleClick={createInvoice} />
+
+					<div className="flex  justify-end gap-12">
+						<GenerateInvoice handleClick={createInvoice} variation="avance" />
+						<GenerateInvoice handleClick={createInvoice} variation="devis" />
+						<GenerateInvoice handleClick={createInvoice} variation="" />
 					</div>
 				</div>
 				<div className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 w-full flex justify-between pb-1 pt-4 px-12 gap-1.5 rounded-md shadow-sm box-border">
