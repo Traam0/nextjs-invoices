@@ -42,27 +42,27 @@ const tabs: Omit<Tabs, "onClick">[] = [
 		disabled: false,
 		active: false,
 	},
-	{
-		label: "Clients",
-		Icon: IconUsersGroup,
-		dest: "/clients",
-		disabled: false,
-		active: false,
-	},
-	{
-		label: "Expenses",
-		Icon: IconCoins,
-		dest: "/expenses",
-		disabled: false,
-		active: false,
-	},
-	{
-		label: "sauvguard",
-		Icon: IconDeviceFloppy,
-		dest: "/saved",
-		disabled: false,
-		active: false,
-	},
+	// {
+	// 	label: "Clients",
+	// 	Icon: IconUsersGroup,
+	// 	dest: "/clients",
+	// 	disabled: false,
+	// 	active: false,
+	// },
+	// {
+	// 	label: "Expenses",
+	// 	Icon: IconCoins,
+	// 	dest: "/expenses",
+	// 	disabled: true,
+	// 	active: false,
+	// },
+	// {
+	// 	label: "sauvguard",
+	// 	Icon: IconDeviceFloppy,
+	// 	dest: "/saved",
+	// 	disabled: true,
+	// 	active: false,
+	// },
 ];
 
 export function DesktopNavigation({ className }: { className: string }) {
@@ -165,7 +165,7 @@ export function DesktopNavigation({ className }: { className: string }) {
 				) : (
 					<></>
 				)}
-				<div
+				{/* <div
 					className={classNames(
 						"flex justify-start items-center w-full gap-2 md:cursor-pointer relative group",
 						"/profile/settings" === active ? "text-orange-600" : "text-gray-800"
@@ -186,9 +186,9 @@ export function DesktopNavigation({ className }: { className: string }) {
 							Settings
 						</div>
 					)}
-				</div>
+				</div> */}
 
-				<div
+				{/* <div
 					className={classNames(
 						"flex justify-start items-center w-full gap-2 md:cursor-pointer relative group",
 						"/profile" === active ? "text-600" : "text-gray-800"
@@ -209,7 +209,7 @@ export function DesktopNavigation({ className }: { className: string }) {
 							Profile
 						</div>
 					)}
-				</div>
+				</div> */}
 			</div>
 		</nav>
 	);

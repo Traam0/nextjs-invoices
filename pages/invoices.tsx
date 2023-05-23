@@ -509,7 +509,7 @@ export default function Projects(): JSX.Element {
 					</div>
 				</div>
 				<div className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 w-full flex justify-between pb-1 pt-4 px-12 gap-1.5 rounded-md shadow-sm box-border">
-					<div>signature</div>
+					<div></div>
 					<div className="flex flex-col gap-.5 min-w-[175px]">
 						<div className="text-base font-medium text-black flex gap-12 justify-between">
 							<div>Total HT:</div>
